@@ -28,13 +28,13 @@ def get_user(id: int):
     return user
 
 @users_router.post("/api/users", response_model=Union[Main_User, New_Respons])
-def create_user(item: Annotated[Main_User, Body(enbed=True, description="Новый пользователь")]):
+def create_user(item: Annotated[Main_User, Body(embed=True, description="Новый пользователь")]):
     user = Main_UserDB(name=item.name, id=item.id, password=coder_passwd(item.name))
     users_list.append(user)
     return user
 
 @users_router.put("/api/users", response_model=Union[Main_User, New_Respons])
-def edit_user(item: Annotated[Main_User, Body(enbed=True, description="Изменяем данные для пользователя по id")]):
+def edit_user(item: Annotated[Main_User, Body(embed=True, description="Изменяем данные для пользователя по id")]):
     user = find_user(item.id)
     if user == None:
         return New_Respons(message="Пользователь не найден")
