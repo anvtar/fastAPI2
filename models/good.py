@@ -1,6 +1,6 @@
 from typing import Union, Annotated
 from pydantic import BaseModel, Field, HttpUrl
-from sqlalchemy import Column, String, Integer, Identity
+from sqlalchemy import Column, String, Integer, Identity, Float, ForeignKey
 from sqlalchemy.orm import declarative_base
 from enum import Enum
 
@@ -12,11 +12,20 @@ class User(Base):
     name = Column(String, index=True, nullable=False)
     hashed_password = Column(String)
 
+class Goods(Base):
+    __tablename__ = "goods"
+    id = Column(Integer, Identity(start=1), primary_key=True)
+    name = Column(String, index=True, nullable=False)
+    description = Column(String)
+    price = Column(Float)
+    nalog = Column(Float)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
 class Tags(Enum):
     users = "users"
     advents = "advents"
     info = "info"
-    good = "good"
+    goods = "goods"
 
 class Person(BaseModel):
     lastName: str = Field(default="lastname", min_length=3, max_length=20)
@@ -42,9 +51,27 @@ class Good(BaseModel):
     price: Union[float, None] = 0
     nalog: Union[float, None] = 13.6
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "Товар 1",
+                "description": "Товар не хрупкий",
+                "price": 100,
+                "nalog": 18,
+            }
+        }
+
 class Main_User(BaseModel):
     name: Union[str, None] = None
     id: Annotated[Union[int, None], Field(default=100, ge=1, lt=200)] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "Pldsw",
+                "id": 9
+            }
+        }
 
 class Main_UserDB(Main_User):
     hashed_password: Annotated[Union[str, None], Field(max_length=200, min_length=8)] = None
