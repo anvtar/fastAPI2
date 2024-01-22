@@ -54,7 +54,7 @@ class Good(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "name": "Товар 1",
+                "name": "Товар 25",
                 "description": "Товар не хрупкий",
                 "price": 100,
                 "nalog": 18,
@@ -78,4 +78,3 @@ class Main_UserDB(Main_User):
 
 class New_Respons(BaseModel):
     message: str
-
